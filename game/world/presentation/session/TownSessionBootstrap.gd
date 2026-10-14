@@ -99,7 +99,14 @@ func begin_new_game_from_catalog(
 ) -> Dictionary:
 	if not _pending.is_empty():
 		return _failure("SESSION_BOOTSTRAP_BUSY", false)
-	var compiled := COMPILER.compile(draft, world_data, resident_catalog) as Dictionary
+	# 开局模式只影响 Agent 私有资料（例如狼人杀身份发牌），不进入存档字段。
+	# options 未提供 "gameMode" 时保持 standard，编译结果与历史行为一致。
+	var compiled := COMPILER.compile(
+		draft,
+		world_data,
+		resident_catalog,
+		String(options.get("gameMode", "")),
+	) as Dictionary
 	if not bool(compiled.get("ok", false)):
 		_request_sequence += 1
 		return _finish_immediate(

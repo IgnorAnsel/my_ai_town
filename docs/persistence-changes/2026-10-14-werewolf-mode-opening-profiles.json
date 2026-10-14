@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "decision": "no_migration",
+  "summary": "新增狼人杀模式（路线 A 最小切片）：开局编译新增可选 gameMode 参数，并在 agentSoulProfiles 的私有身份索引中追加阵营条目。磁盘格式未变——agentSoulProfiles 的结构、键集合、版本号与既有存档字段均不变；不传 gameMode 时编译结果与改动前一致。模式本身不写入任何存档字段，读档时由身份编号前缀反推。",
+  "affectedModules": [
+    "session_opening_compiler",
+    "session_bootstrap",
+    "agent_prompt_compiler",
+    "agent_resident_runtime",
+    "agent_soul_profile"
+  ],
+  "migrationIds": [],
+  "docs": [
+    "docs/狼人杀模式设计.md"
+  ]
+}

@@ -5,6 +5,7 @@ extends RefCounted
 const AgentContractScript := preload("res://agent/AgentContract.gd")
 const DecisionExecutionScript := preload("res://agent/DecisionExecution.gd")
 const PromptCompilerScript := preload("res://agent/prompt/AgentPromptCompiler.gd")
+const GameModeScript := preload("res://agent/mode/AgentGameMode.gd")
 const ResidentMemorySystemScript := preload("res://agent/memory/ResidentMemorySystem.gd")
 const ResidentAvatarMemoryModuleScript := preload(
 	"res://agent/avatar_memory/ResidentAvatarMemoryModule.gd"
@@ -39,6 +40,7 @@ func _init(
 	photo_content_resolver: Object = null,
 	avatar_person_id: String = DEFAULT_AVATAR_PERSON_ID,
 	avatar_name: String = DEFAULT_AVATAR_NAME,
+	game_mode: String = "",
 ) -> void:
 	# 入口做一次拷贝形成运行时私有快照（外部调用方之后的改动不得影响居民，
 	# 见 agent_world_wake_test 的所有权契约）；内部各组件共享这份私有快照，
@@ -57,9 +59,10 @@ func _init(
 	)
 	_prompt_compiler = PromptCompilerScript.new(
 		_initialization,
-		"res://prompts",
+		GameModeScript.prompt_root_for(game_mode),
 		photo_content_resolver,
 		avatar_person_id,
+		GameModeScript.prompt_overlay_root_for(game_mode),
 	)
 	_initialization_errors = _prompt_compiler.get_load_errors()
 	_decision_execution = DecisionExecutionScript.new(model_provider, _prompt_compiler)

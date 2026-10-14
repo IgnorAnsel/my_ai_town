@@ -20,6 +20,7 @@ const MOVEMENT := preload(
 	"res://world/data/town/TownWorldCharacterMovementQuery.gd"
 )
 const SOUL_PROFILE := preload("res://agent/soul/AgentSoulProfile.gd")
+const GAME_MODE := preload("res://agent/mode/AgentGameMode.gd")
 const REQUIRED_ATTRIBUTES: Array[String] = [
 	"name",
 	"gender",
@@ -37,6 +38,7 @@ static func compile(
 	draft: Dictionary,
 	world_data: Dictionary,
 	catalog: Dictionary,
+	game_mode: String = "",
 ) -> Dictionary:
 	var draft_validation := DRAFT.validate(draft)
 	if not bool(draft_validation.get("ok", false)):
@@ -235,6 +237,19 @@ static func compile(
 	var player_avatar := (defaults.get("playerAvatar", {}) as Dictionary).duplicate(true)
 	if String(player_avatar.get("residentId", "")).strip_edges().is_empty():
 		player_avatar["residentId"] = DEFAULT_OPAQUE_AVATAR_ID
+	var opening_soul_profiles := SOUL_PROFILE.analyze_all(opening_residents)
+	# 模式身份（例如狼人杀阵营）只追加到私有资料里，不进入 World 公开状态。
+	# STANDARD 模式或资料合并失败时原样返回 OC 分析结果，开局不受影响。
+	var opening_resident_ids: Array[String] = []
+	for opening_resident: Dictionary in opening_residents:
+		opening_resident_ids.append(String(opening_resident.get("residentId", "")))
+	opening_soul_profiles = GAME_MODE.merge_soul_profiles(
+		game_mode,
+		opening_soul_profiles,
+		opening_resident_ids,
+		opening_residents,
+		GAME_MODE.opening_seed(opening_environment),
+	)
 	var opening_config := {
 		"schemaVersion": 1,
 		"worldId": String(world_data.get("worldId", "")),
@@ -243,7 +258,7 @@ static func compile(
 		"residents": opening_residents,
 		# 开局只分析一次；完整原始 OC 仍保留在 residents.attributes，
 		# 这里存放给对应 Agent 的私有结构化索引。
-		"agentSoulProfiles": SOUL_PROFILE.analyze_all(opening_residents),
+		"agentSoulProfiles": opening_soul_profiles,
 		"playerAvatar": player_avatar,
 	}
 	var opening_errors := OPENING.validate(opening_config, world_data)

@@ -4,6 +4,7 @@ extends RefCounted
 
 const AgentContractScript := preload("res://agent/AgentContract.gd")
 const AgentFileSystemScript := preload("res://agent/AgentFileSystem.gd")
+const GameModeScript := preload("res://agent/mode/AgentGameMode.gd")
 const ResidentRuntimeScript := preload("res://agent/ResidentRuntime.gd")
 const AgentSaveStoreScript := preload("res://agent/lifecycle/AgentSaveStore.gd")
 const AgentSessionEpochScript := preload("res://agent/lifecycle/AgentSessionEpoch.gd")
@@ -47,12 +48,66 @@ var _avatar_name := DEFAULT_AVATAR_NAME
 var _departure_operations: Dictionary = {}
 var _decision_retry_feedback: Dictionary = {}
 var _event_memory_claim_roots: Dictionary = {}
+# 开局模式只影响 Agent 侧提示词覆盖层，不进入世界状态与存档字段。
+# 默认 STANDARD 与历史行为完全一致。
+var _game_mode := GameModeScript.STANDARD
 
 
 func _init(save_store: RefCounted = null) -> void:
 	_save_store = save_store if save_store != null else AgentSaveStoreScript.new()
 	_memory_root = _allocate_runtime_memory_root("initial")
 	_memory_root_owned = true
+
+
+## 设置本会话的开局模式。默认 STANDARD，调用方不设置时行为不变。
+##
+## 模式必须在居民运行时建立前设置；已有居民时拒绝改写，避免同一会话内
+## 出现两套提示词基线。模式本身不写入存档、不进入世界状态。
+func set_game_mode(value: Variant) -> Dictionary:
+	var errors := GameModeScript.validate(value)
+	if not errors.is_empty():
+		return {"ok": false, "errors": errors}
+	# 覆盖层缺失时不允许切换到该模式，避免静默退化成普通模式。
+	errors = GameModeScript.validate_overlay(value)
+	if not errors.is_empty():
+		return {"ok": false, "errors": errors}
+	var mode := GameModeScript.normalize(value)
+	if mode == _game_mode:
+		return {"ok": true, "mode": mode, "changed": false}
+	if (
+		not _residents.is_empty()
+		or not _pending_new_game.is_empty()
+		or not _pending_restore.is_empty()
+	):
+		return {
+			"ok": false,
+			"errors": ["开局模式必须在居民运行时建立前设置"],
+		}
+	_game_mode = mode
+	return {"ok": true, "mode": mode, "changed": true}
+
+
+func get_game_mode() -> String:
+	return _game_mode
+
+
+## 读档时从 Agent 私有身份索引还原开局模式。
+##
+## 模式刻意不写入存档字段，所以这里只能靠居民初始化资料里的身份编号还原。
+## 只要有任何一名居民携带模式身份，就认定本局是该模式——这样即使个别居民
+## 是入镇替补（其资料由开局分析重建、不带阵营），也不会把整局模式翻回普通。
+## 识别不出时保持调用方已设置的模式，不覆盖显式配置。
+func _adopt_detected_game_mode(resident_states: Dictionary) -> void:
+	if _game_mode == GameModeScript.WEREWOLF:
+		return
+	for resident_id: Variant in resident_states:
+		var state := resident_states[resident_id] as Dictionary
+		var detected := GameModeScript.detect_from_initialization(
+			state.get("initialization"),
+		)
+		if detected != GameModeScript.STANDARD:
+			_game_mode = detected
+			return
 
 
 func configure_avatar_identity(
@@ -156,6 +211,9 @@ func restore_game(context: Variant) -> Dictionary:
 		_discard_pending_new_game()
 		_discard_pending_restore()
 		return _commit_restore_transaction(transaction)
+	# 读档必须在建立居民运行时之前还原模式：居民运行时构造时就要选定
+	# 提示词覆盖层，晚于此处的识别对已构造的居民无效。
+	_adopt_detected_game_mode(transaction["resident_states"] as Dictionary)
 	_discard_pending_new_game()
 	_discard_pending_restore()
 	_pending_restore = transaction
@@ -585,6 +643,7 @@ func hydrate_restored_resident(
 		photo_content_resolver,
 		_avatar_person_id,
 		_avatar_name,
+		_game_mode,
 	)
 	var runtime_errors: Array = resident.call("get_initialization_errors")
 	if not runtime_errors.is_empty():
@@ -660,6 +719,7 @@ func initialize_resident(
 		photo_content_resolver,
 		_avatar_person_id,
 		_avatar_name,
+		_game_mode,
 	)
 	var runtime_errors: Array = resident_runtime.call("get_initialization_errors")
 	if not runtime_errors.is_empty():
@@ -727,6 +787,7 @@ func validate_resident_replacement(
 		photo_content_resolver,
 		_avatar_person_id,
 		_avatar_name,
+		_game_mode,
 	)
 	var runtime_errors: Array = resident_runtime.get_initialization_errors()
 	if not runtime_errors.is_empty():

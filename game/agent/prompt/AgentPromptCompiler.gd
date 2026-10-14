@@ -23,6 +23,7 @@ var _initialization: Dictionary
 var _resident_names: Dictionary = {}
 var _initialization_prompt: String
 var _prompt_root: String
+var _mode_overlay_root: String
 var _load_errors: Array[String] = []
 var _photo_content_resolver: Object
 var _avatar_person_id := ""
@@ -33,10 +34,14 @@ func _init(
 	prompt_root: String = DEFAULT_PROMPT_ROOT,
 	photo_content_resolver: Object = null,
 	avatar_person_id: String = "",
+	mode_overlay_root: String = "",
 ) -> void:
 	# initialization 为共享只读数据（约定不可变），各组件持引用不再各存深拷贝。
 	_initialization = initialization
 	_prompt_root = prompt_root.trim_suffix("/")
+	# 模式覆盖层只追加载静态规则的补充部分；空串表示普通模式，不加载任何
+	# 额外文件，行为与历史版本完全一致。
+	_mode_overlay_root = mode_overlay_root.strip_edges().trim_suffix("/")
 	_photo_content_resolver = photo_content_resolver
 	_avatar_person_id = avatar_person_id.strip_edges()
 	_index_resident_names()
@@ -2042,8 +2047,9 @@ func _get_static_prompt(
 	include_event_rules: bool,
 	include_examples: bool,
 ) -> String:
-	var cache_key := "%s|events=%s|examples=%s" % [
+	var cache_key := "%s|overlay=%s|events=%s|examples=%s" % [
 		_prompt_root,
+		_mode_overlay_root,
 		str(include_event_rules),
 		str(include_examples),
 	]
@@ -2073,7 +2079,61 @@ func _load_static_prompt(
 		)
 		if not content.is_empty():
 			sections.append("<%s>\n## %s\n\n%s\n</%s>" % [tag, heading, content, tag])
+	var overlay := _load_mode_overlay()
+	if not overlay.is_empty():
+		sections.append("<mode_rules>\n## 本局模式规则\n\n%s\n</mode_rules>" % overlay)
 	return "\n\n".join(sections)
+
+
+## 模式覆盖层：在基线静态规则之后追加本模式的补充规则。
+##
+## 与 _load_layer 的关键差别是**缺失目录不算错误**：普通模式没有覆盖层，
+## 或者某个模式只提供 rules 而没有 background，都属于正常情况，不能因此
+## 让居民初始化失败。
+func _load_mode_overlay() -> String:
+	if _mode_overlay_root.is_empty():
+		return ""
+	var sections: Array[String] = []
+	for layer: Dictionary in STATIC_LAYERS:
+		var contents := _read_markdown_directory(
+			_mode_overlay_root.path_join(String(layer["directory"])),
+		)
+		if not contents.is_empty():
+			sections.append("\n\n".join(contents))
+	return "\n\n".join(sections)
+
+
+## 按文件名排序读取目录下全部 .md 的非空内容；目录不存在时返回空数组。
+## 这是覆盖层专用的宽松读取，不写入 _load_errors。
+func _read_markdown_directory(directory_path: String) -> Array[String]:
+	var contents: Array[String] = []
+	# 先判存在再打开：DirAccess.open 对缺失目录会向控制台输出引擎错误，
+	# 而 CI 会把 ERROR 行判为失败。
+	if not DirAccess.dir_exists_absolute(directory_path):
+		return contents
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return contents
+	var filenames: Array[String] = []
+	directory.list_dir_begin()
+	var filename := directory.get_next()
+	while not filename.is_empty():
+		if not directory.current_is_dir() and filename.ends_with(".md"):
+			filenames.append(filename)
+		filename = directory.get_next()
+	directory.list_dir_end()
+	filenames.sort()
+	for prompt_filename: String in filenames:
+		var file := FileAccess.open(
+			directory_path.path_join(prompt_filename),
+			FileAccess.READ,
+		)
+		if file == null:
+			continue
+		var content := file.get_as_text().strip_edges()
+		if not content.is_empty():
+			contents.append(content)
+	return contents
 
 
 func _load_layer(
