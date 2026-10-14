@@ -53,7 +53,23 @@
     "suit_man",
     "neutral_hoodie",
     "energetic_ponytail",
-    "street_creator"
+    "street_creator",
+    "deepseek",
+    "gpt",
+    "claude",
+    "grok",
+    "gemini",
+    "kimi",
+    "glm",
+    "qwen",
+    "seed",
+    "minimax",
+    "llama",
+    "mistral",
+    "perplexity",
+    "wenxin",
+    "jev",
+    "silver_bob"
   ],
   "loadouts": [
     {
@@ -16911,6 +16927,214 @@
         "shoes": "street_creator"
       },
       "preset": false
+    },
+    {
+      "loadoutId": "deepseek",
+      "displayName": "DeepSeek 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/deepseek_walk_64.png",
+      "selection": {
+        "head": "deepseek",
+        "top_hands": "deepseek",
+        "bottom": "deepseek",
+        "shoes": "deepseek"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "gpt",
+      "displayName": "GPT 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/gpt_walk_64.png",
+      "selection": {
+        "head": "gpt",
+        "top_hands": "gpt",
+        "bottom": "gpt",
+        "shoes": "gpt"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "claude",
+      "displayName": "Claude 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/claude_walk_64.png",
+      "selection": {
+        "head": "claude",
+        "top_hands": "claude",
+        "bottom": "claude",
+        "shoes": "claude"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "grok",
+      "displayName": "Grok 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/grok_walk_64.png",
+      "selection": {
+        "head": "grok",
+        "top_hands": "grok",
+        "bottom": "grok",
+        "shoes": "grok"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "gemini",
+      "displayName": "Gemini 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/gemini_walk_64.png",
+      "selection": {
+        "head": "gemini",
+        "top_hands": "gemini",
+        "bottom": "gemini",
+        "shoes": "gemini"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "kimi",
+      "displayName": "Kimi 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/kimi_walk_64.png",
+      "selection": {
+        "head": "kimi",
+        "top_hands": "kimi",
+        "bottom": "kimi",
+        "shoes": "kimi"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "glm",
+      "displayName": "GLM 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/glm_walk_64.png",
+      "selection": {
+        "head": "glm",
+        "top_hands": "glm",
+        "bottom": "glm",
+        "shoes": "glm"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "qwen",
+      "displayName": "Qwen 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/qwen_walk_64.png",
+      "selection": {
+        "head": "qwen",
+        "top_hands": "qwen",
+        "bottom": "qwen",
+        "shoes": "qwen"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "seed",
+      "displayName": "Seed 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/seed_walk_64.png",
+      "selection": {
+        "head": "seed",
+        "top_hands": "seed",
+        "bottom": "seed",
+        "shoes": "seed"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "minimax",
+      "displayName": "MiniMax 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/minimax_walk_64.png",
+      "selection": {
+        "head": "minimax",
+        "top_hands": "minimax",
+        "bottom": "minimax",
+        "shoes": "minimax"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "llama",
+      "displayName": "Llama 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/llama_walk_64.png",
+      "selection": {
+        "head": "llama",
+        "top_hands": "llama",
+        "bottom": "llama",
+        "shoes": "llama"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "mistral",
+      "displayName": "Mistral 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/mistral_walk_64.png",
+      "selection": {
+        "head": "mistral",
+        "top_hands": "mistral",
+        "bottom": "mistral",
+        "shoes": "mistral"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "perplexity",
+      "displayName": "Perplexity 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/perplexity_walk_64.png",
+      "selection": {
+        "head": "perplexity",
+        "top_hands": "perplexity",
+        "bottom": "perplexity",
+        "shoes": "perplexity"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "wenxin",
+      "displayName": "文心娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/wenxin_walk_64.png",
+      "selection": {
+        "head": "wenxin",
+        "top_hands": "wenxin",
+        "bottom": "wenxin",
+        "shoes": "wenxin"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "jev",
+      "displayName": "JEV 娘",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/jev_walk_64.png",
+      "selection": {
+        "head": "jev",
+        "top_hands": "jev",
+        "bottom": "jev",
+        "shoes": "jev"
+      },
+      "preset": true
+    },
+    {
+      "loadoutId": "silver_bob",
+      "displayName": "银灰短发",
+      "previewOnly": false,
+      "atlas": "assets/characters/paper_doll_64/compiled/silver_bob_walk_64.png",
+      "selection": {
+        "head": "silver_bob",
+        "top_hands": "silver_bob",
+        "bottom": "silver_bob",
+        "shoes": "silver_bob"
+      },
+      "preset": true
     }
   ],
   "slotVariants": {
@@ -17108,6 +17332,182 @@
         "top_hands": "street_creator",
         "bottom": "street_creator",
         "shoes": "street_creator"
+      }
+    },
+    {
+      "loadoutId": "deepseek",
+      "displayName": "DeepSeek 娘",
+      "status": "approved",
+      "selection": {
+        "head": "deepseek",
+        "top_hands": "deepseek",
+        "bottom": "deepseek",
+        "shoes": "deepseek"
+      }
+    },
+    {
+      "loadoutId": "gpt",
+      "displayName": "GPT 娘",
+      "status": "approved",
+      "selection": {
+        "head": "gpt",
+        "top_hands": "gpt",
+        "bottom": "gpt",
+        "shoes": "gpt"
+      }
+    },
+    {
+      "loadoutId": "claude",
+      "displayName": "Claude 娘",
+      "status": "approved",
+      "selection": {
+        "head": "claude",
+        "top_hands": "claude",
+        "bottom": "claude",
+        "shoes": "claude"
+      }
+    },
+    {
+      "loadoutId": "grok",
+      "displayName": "Grok 娘",
+      "status": "approved",
+      "selection": {
+        "head": "grok",
+        "top_hands": "grok",
+        "bottom": "grok",
+        "shoes": "grok"
+      }
+    },
+    {
+      "loadoutId": "gemini",
+      "displayName": "Gemini 娘",
+      "status": "approved",
+      "selection": {
+        "head": "gemini",
+        "top_hands": "gemini",
+        "bottom": "gemini",
+        "shoes": "gemini"
+      }
+    },
+    {
+      "loadoutId": "kimi",
+      "displayName": "Kimi 娘",
+      "status": "approved",
+      "selection": {
+        "head": "kimi",
+        "top_hands": "kimi",
+        "bottom": "kimi",
+        "shoes": "kimi"
+      }
+    },
+    {
+      "loadoutId": "glm",
+      "displayName": "GLM 娘",
+      "status": "approved",
+      "selection": {
+        "head": "glm",
+        "top_hands": "glm",
+        "bottom": "glm",
+        "shoes": "glm"
+      }
+    },
+    {
+      "loadoutId": "qwen",
+      "displayName": "Qwen 娘",
+      "status": "approved",
+      "selection": {
+        "head": "qwen",
+        "top_hands": "qwen",
+        "bottom": "qwen",
+        "shoes": "qwen"
+      }
+    },
+    {
+      "loadoutId": "seed",
+      "displayName": "Seed 娘",
+      "status": "approved",
+      "selection": {
+        "head": "seed",
+        "top_hands": "seed",
+        "bottom": "seed",
+        "shoes": "seed"
+      }
+    },
+    {
+      "loadoutId": "minimax",
+      "displayName": "MiniMax 娘",
+      "status": "approved",
+      "selection": {
+        "head": "minimax",
+        "top_hands": "minimax",
+        "bottom": "minimax",
+        "shoes": "minimax"
+      }
+    },
+    {
+      "loadoutId": "llama",
+      "displayName": "Llama 娘",
+      "status": "approved",
+      "selection": {
+        "head": "llama",
+        "top_hands": "llama",
+        "bottom": "llama",
+        "shoes": "llama"
+      }
+    },
+    {
+      "loadoutId": "mistral",
+      "displayName": "Mistral 娘",
+      "status": "approved",
+      "selection": {
+        "head": "mistral",
+        "top_hands": "mistral",
+        "bottom": "mistral",
+        "shoes": "mistral"
+      }
+    },
+    {
+      "loadoutId": "perplexity",
+      "displayName": "Perplexity 娘",
+      "status": "approved",
+      "selection": {
+        "head": "perplexity",
+        "top_hands": "perplexity",
+        "bottom": "perplexity",
+        "shoes": "perplexity"
+      }
+    },
+    {
+      "loadoutId": "wenxin",
+      "displayName": "文心娘",
+      "status": "approved",
+      "selection": {
+        "head": "wenxin",
+        "top_hands": "wenxin",
+        "bottom": "wenxin",
+        "shoes": "wenxin"
+      }
+    },
+    {
+      "loadoutId": "jev",
+      "displayName": "JEV 娘",
+      "status": "approved",
+      "selection": {
+        "head": "jev",
+        "top_hands": "jev",
+        "bottom": "jev",
+        "shoes": "jev"
+      }
+    },
+    {
+      "loadoutId": "silver_bob",
+      "displayName": "银灰短发",
+      "status": "approved",
+      "selection": {
+        "head": "silver_bob",
+        "top_hands": "silver_bob",
+        "bottom": "silver_bob",
+        "shoes": "silver_bob"
       }
     }
   ]
